@@ -8,7 +8,6 @@ class WhiteListHtmlParser(ABC, HTMLParser):
         self.__readable_tags = self.readable_tags()
         self.current_data = ""
         self.should_read = False
-        self.should_propagate_end_tag = False
 
     def __get_attrs_value_by_name(self, lst, attrs_name):
         for elem in lst:
@@ -23,11 +22,10 @@ class WhiteListHtmlParser(ABC, HTMLParser):
         attrs_class_name = self.__get_attrs_value_by_name(attrs, "class")
         if (attrs_class_name is None or attrs_class_name not in readable_classes):
             return
-        self.should_propagate_end_tag = True
         self.should_read = self.start_new_tag(tag, dict(attrs))
+        self.current_data = ""
 
     def handle_endtag(self, tag):
-        self.should_propagate_end_tag = False
         self.end_tag(tag)
 
     def handle_data(self, data):

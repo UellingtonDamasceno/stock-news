@@ -14,30 +14,22 @@ class InfoMoneyParser(WhiteListHtmlParser):
         self.in_section = False
 
     def start_new_tag(self, tag, attrs):
-        self.current_data = ""
         if(tag == "section"):
             self.in_section = True
-            return True
         elif(tag == "article"):
             self.in_article = True
-            print("-"*50)
-            return True
-
-        print("Tag: ", tag)
-        print("Attrs: ")
-        for key, value in attrs.items():
-            print("  ", key, ":", value)
-        print("-"*50)
-
-        if(tag == "a"):
+        elif(tag == "a"):
             self.current_news["link"] = attrs.get("href")
+            self.current_news["tag"] = self.get_formatted_data()
         elif(tag == "h3"):
             self.current_news["title"] = self.get_formatted_data()
-        elif(tag == "span" or tag == "div"):
-            print("Current Tag: ", tag)
-            self.current_news["tag"] = self.get_formatted_data()
 
         self.current_news["category"] = self.category
+        # print("Tag: ", tag)
+        # print("Attrs: ")
+        # for key, value in attrs.items():
+        #     print("  ", key, ":", value)
+
         return True
 
     def end_tag(self, tag):
@@ -52,19 +44,13 @@ class InfoMoneyParser(WhiteListHtmlParser):
     def readable_tags(self):
         readable_tags = {}
         a_tag = readable_tags.setdefault("a", set())
-        div_tag = readable_tags.setdefault("div", set())
-        span_tag = readable_tags.setdefault("span", set())
         h3_tag = readable_tags.setdefault("h3", set())
-        span_tag = readable_tags.setdefault("span", set())
         article_tag = readable_tags.setdefault("article", set())
         section_tag = readable_tags.setdefault("section", set())
 
         a_tag.add("article-card__headline-link")
         a_tag.add("article-card__asset-link")
-        span_tag.add("article-card__overline")
-        div_tag.add("article-card__overline")
         h3_tag.add("article-card__headline")
-        span_tag.add("article-card__overline")
         article_tag.add("article-card")
         section_tag.add("articlespack-list")
 

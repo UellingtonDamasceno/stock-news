@@ -7,7 +7,7 @@ import json
 
 def save_news(news):
     with open("news.json", "w") as f:
-        json.dump(news, f, ensure_ascii=False)
+        json.dump(news, f, ensure_ascii=False, indent=2)
 
 
 def get_category_from_url(url):
