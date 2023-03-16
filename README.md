@@ -1,7 +1,6 @@
 # stock-news
 
-O Projeto em questão consiste em um crawler capaz de buscar dados de sites de noticias sobre empresas listadas na bolsa de ações.
-Para que futuramente seja feita análise da notícia a fim de avaliar se ela pode gerar uma alta ou queda na ação daquela determinada empresa. 
+O projeto visa desenvolver um crawler capaz de buscar dados de sites de notícias sobre empresas listadas na bolsa de valores, com o objetivo de coletar informações relevantes para análise da movimentação das ações dessas empresas. Com a análise de sentimentos das notícias coletadas, será possível avaliar se uma determinada notícia tem potencial para gerar uma alta ou queda na ação daquela empresa. 
 
 # Lista de links
 
