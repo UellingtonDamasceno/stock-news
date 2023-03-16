@@ -17,12 +17,12 @@ https://www.infomoney.com.br/tudo-sobre/imposto-de-renda
 # Esquema de dados
 ```json
 {
-  "tag": String,
-  "category": String,
-  "title": String,
-  "link": String,
-  "content": String,
-  "category: String
+  "tag": "String",
+  "category": "String",
+  "title": "String",
+  "link": "String",
+  "content": "String",
+  "category": "String"
 }
 ```
 # Exemplo extraido
