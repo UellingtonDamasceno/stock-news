@@ -1,0 +1,25 @@
+from crawlers.info_money import InfoMoneyParser
+
+from urllib.request import urlopen
+import json
+# Procedimento que recebe uma lista de news e salva em um arquivo
+
+
+def save_news(news):
+    with open("news.json", "w") as f:
+        json.dump(news, f, ensure_ascii=False)
+
+
+def get_category_from_url(url):
+    return url[url.rfind("/") + 1:].replace("\n", "")
+
+
+if __name__ == "__main__":
+    parser = InfoMoneyParser()
+    with open("seeds.txt", "r") as f:
+        for url in f.readlines():
+            print("Parsing: ", url)
+            parser.category = get_category_from_url(url)
+            page = urlopen(url).read().decode("utf-8")
+            parser.feed(page)
+            save_news(parser.news)
