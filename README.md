@@ -15,7 +15,8 @@ https://www.infomoney.com.br/tudo-sobre/seguros
 https://www.infomoney.com.br/tudo-sobre/imposto-de-renda
 
 # Esquema de dados
-```json{
+```json
+{
   "tag": String,
   "category": String,
   "title": String,
