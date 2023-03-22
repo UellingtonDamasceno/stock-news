@@ -6,17 +6,27 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
     def __init__(self):
         super().__init__()
         self.content_news = dict()
+        self.paragraphs = []
         self.in_author_tag = False
+        self.in_content_tag = False
         self.current_tag = None
 
     def start_new_tag(self, tag, attrs):
         if tag == "span":
             self.in_author_tag = True
             return False
-
+        if tag == "time":
+            self.content_news["published_at"] = attrs.get("datetime")
+            return False
+        if tag == "img":
+            self.content_news["image"] = attrs.get("src")
+            return False
         if tag == "a" and self.in_author_tag:
             return True
-
+        if tag == "div":
+            self.in_content_tag = True
+            self.paragraphs = []
+            return True
         # print("Tag: ", tag)
         # print("Attrs: ")
         # for key, value in attrs.items():
@@ -29,13 +39,30 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
             self.in_author_tag = False
         if tag == "a" and self.in_author_tag:
             self.content_news["author"] = self.get_formatted_data()
+        if tag == "div" and self.in_content_tag:
+            self.content_news["content"] = self.paragraphs
+            self.in_content_tag = False
+        if tag == "p" and self.in_content_tag:
+            self.paragraphs.append(self.get_formatted_data())
+            self.current_data = ""
+
+            # print(paragraphs)
 
     def readable_tags(self):
         readable_tags = {}
         span_tag = readable_tags.setdefault("span", set())
+        time_tag = readable_tags.setdefault("time", set())
+        img_tag = readable_tags.setdefault("img", set())
+        div_tag = readable_tags.setdefault("div", set())
+
         a_tag = readable_tags.setdefault("a", set())
+        p_tag = readable_tags.setdefault("p", set())
 
         span_tag.add("typography__body--5")
+        img_tag.add("imds__aspect-ratio-image wp-post-image")
+        time_tag.add("entry-date published")
+        time_tag.add("entry-date published updated")
+        div_tag.add("element-border--bottom spacing--pb4")
 
         return readable_tags
 
