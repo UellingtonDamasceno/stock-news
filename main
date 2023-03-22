@@ -1,5 +1,5 @@
-from crawlers.info_money import InfoMoneyParser
-
+from crawlers.info_money.info_money import InfoMoneyParser
+from crawlers.info_money.info_money_news_reader import InfoMoneyNewsReader
 from urllib.request import urlopen
 import json
 # Procedimento que recebe uma lista de news e salva em um arquivo
@@ -14,12 +14,31 @@ def get_category_from_url(url):
     return url[url.rfind("/") + 1:].replace("\n", "")
 
 
-if __name__ == "__main__":
-    parser = InfoMoneyParser()
-    with open("seeds.txt", "r") as f:
+def read_lines_from_file(file_name):
+    lines = []
+    with open(file_name, "r") as f:
         for url in f.readlines():
-            print("Parsing: ", url)
-            parser.category = get_category_from_url(url)
-            page = urlopen(url).read().decode("utf-8")
-            parser.feed(page)
-            save_news(parser.news)
+            lines.append(url.replace("\n", ""))
+    return lines
+
+
+if __name__ == "__main__":
+    seeds = read_lines_from_file("seeds.txt")
+    parser = InfoMoneyParser(allowed_urls=seeds)
+    news_reader = InfoMoneyNewsReader()
+    all_news = []
+    for url in seeds:
+        print("Parsing: ", url)
+        parser.category = get_category_from_url(url)
+        page = urlopen(url).read().decode("utf-8")
+        parser.feed(page)
+        for news in parser.news:
+            print("Parsing news: ", news["link"])
+            news_page = urlopen(news["link"]).read().decode("utf-8")
+            news_reader.feed(news_page)
+            # news["content"] = news_reader.content_news["content"]
+            news["author"] = news_reader.content_news["author"]
+            news_reader.content_news = dict()
+        all_news.extend(parser.news)
+        parser.news = []
+    save_news(all_news)

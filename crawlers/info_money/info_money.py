@@ -4,8 +4,8 @@ import re
 
 class InfoMoneyParser(WhiteListHtmlParser):
 
-    def __init__(self, category="S/C"):
-        super().__init__()
+    def __init__(self, category="S/C", allowed_urls=[]):
+        super().__init__(allowed_url=allowed_urls)
         self.category = category
         self.current_news = dict()
         self.current_tag = None
@@ -33,8 +33,9 @@ class InfoMoneyParser(WhiteListHtmlParser):
         return True
 
     def end_tag(self, tag):
-        if(tag == "article" and self.in_section):
+        if(tag == "article" and self.in_section and self.is_url_allowed(self.current_news["link"])):
             self.current_news["title"] = self.get_formatted_data()
+            self.current_news["content"] = ""
             self.news.append(self.current_news)
             self.current_news = dict()
 
