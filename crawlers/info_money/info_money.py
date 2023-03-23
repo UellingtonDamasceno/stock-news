@@ -1,5 +1,4 @@
 from crawlers.white_list_html_parser import WhiteListHtmlParser
-import re
 
 
 class InfoMoneyParser(WhiteListHtmlParser):
@@ -8,7 +7,6 @@ class InfoMoneyParser(WhiteListHtmlParser):
         super().__init__(allowed_url=allowed_urls)
         self.category = category
         self.current_news = dict()
-        self.current_tag = None
         self.news = []
         self.in_article = False
         self.in_section = False
@@ -56,6 +54,3 @@ class InfoMoneyParser(WhiteListHtmlParser):
         section_tag.add("articlespack-list")
 
         return readable_tags
-
-    def get_formatted_data(self):
-        return re.sub(r"\s{4,}", " ", self.current_data.strip())

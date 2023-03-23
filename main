@@ -1,46 +1,25 @@
-from crawlers.info_money.info_money import InfoMoneyParser
-from crawlers.info_money.info_money_news_reader import InfoMoneyNewsReader
-from urllib.request import urlopen
+from services.info_money_service import InfoMoneyService
+from services.money_times_service import MoneyTimesService
 import json
-# Procedimento que recebe uma lista de news e salva em um arquivo
 
 
-def save_news(news):
-    with open("news.json", "w") as f:
+def save_news(filename, news):
+    with open(filename, "w") as f:
         json.dump(news, f, ensure_ascii=False, indent=2)
 
 
-def get_category_from_url(url):
-    return url[url.rfind("/") + 1:].replace("\n", "")
+def processInfoMoney():
+    info_money_seeds = "seeds/info_money.txt"
+    info_money_service = InfoMoneyService(info_money_seeds)
+    save_news("news/infomoney.json", info_money_service.process())
 
 
-def read_lines_from_file(file_name):
-    lines = []
-    with open(file_name, "r") as f:
-        for url in f.readlines():
-            lines.append(url.replace("\n", ""))
-    return lines
+def processMoneyTimes():
+    money_times_seeds = "seeds/money_times.txt"
+    money_times_service = MoneyTimesService(money_times_seeds)
+    save_news("news/moneytimes.json", money_times_service.process())
 
 
 if __name__ == "__main__":
-    seeds = read_lines_from_file("seeds.txt")
-    parser = InfoMoneyParser(allowed_urls=seeds)
-    news_reader = InfoMoneyNewsReader()
-    all_news = []
-    for url in seeds:
-        print("Parsing URL: ", url)
-        parser.category = get_category_from_url(url)
-        page = urlopen(url).read().decode("utf-8")
-        parser.feed(page)
-        for news in parser.news:
-            print("Parsing news: ", news["link"])
-            news_page = urlopen(news["link"]).read().decode("utf-8")
-            news_reader.feed(news_page)
-            news["published_at"] = news_reader.content_news["published_at"]
-            news["author"] = news_reader.content_news["author"]
-            news["image"] = news_reader.content_news.get("image", "")
-            news["content"] = news_reader.content_news.get("content", [])
-            news_reader.content_news = dict()
-        all_news.extend(parser.news)
-        parser.news = []
-    save_news(all_news)
+    # processInfoMoney()
+    processMoneyTimes()
