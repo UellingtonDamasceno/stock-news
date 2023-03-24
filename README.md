@@ -3,15 +3,14 @@
 O projeto visa desenvolver um crawler capaz de buscar dados de sites de notícias sobre empresas listadas na bolsa de valores, com o objetivo de coletar informações relevantes para análise da movimentação das ações dessas empresas. Com a análise de sentimentos das notícias coletadas, será possível avaliar se uma determinada notícia tem potencial para gerar uma alta ou queda na ação daquela empresa. 
 
 # Lista de links
-
+```
 https://www.infomoney.com.br/mercados
 https://www.infomoney.com.br/economia
 https://www.infomoney.com.br/negocios
 https://www.infomoney.com.br/politica
 https://www.infomoney.com.br/onde-investir
 https://www.infomoney.com.br/minhas-financas
-https://www.infomoney.com.br/tudo-sobre/seguros
-https://www.infomoney.com.br/tudo-sobre/imposto-de-renda
+```
 
 # Esquema de dados
 ```json
