@@ -6,7 +6,7 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
     def __init__(self):
         super().__init__()
         self.content_news = dict()
-        self.paragraphs = []
+        self.paragraphs = ""
         self.in_author_tag = False
         self.in_content_tag = False
         self.current_tag = None
@@ -21,11 +21,18 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
         if tag == "img":
             self.content_news["image"] = attrs.get("src")
             return False
-        if tag == "a" and self.in_author_tag:
-            return True
+        if tag == "a":
+            if self.in_author_tag:
+                return True
+            elif not self.in_author_tag:
+                return False
         if tag == "div":
             self.in_content_tag = True
-            self.paragraphs = []
+            return True
+        if tag == "p":
+            if not self.in_content_tag:
+                return False
+            self.current_data = ""
             return True
         # print("Tag: ", tag)
         # print("Attrs: ")
@@ -41,9 +48,10 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
             self.content_news["author"] = self.get_formatted_data()
         if tag == "div" and self.in_content_tag:
             self.content_news["content"] = self.paragraphs
+            self.paragraphs = ""
             self.in_content_tag = False
         if tag == "p" and self.in_content_tag:
-            self.paragraphs.append(self.get_formatted_data())
+            self.paragraphs += " " + self.get_formatted_data()
             self.current_data = ""
 
             # print(paragraphs)
