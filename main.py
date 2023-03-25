@@ -21,5 +21,5 @@ def processMoneyTimes():
 
 
 if __name__ == "__main__":
-    processInfoMoney()
+    # processInfoMoney()
     processMoneyTimes()
