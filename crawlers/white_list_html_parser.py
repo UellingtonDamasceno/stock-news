@@ -28,7 +28,7 @@ class WhiteListHtmlParser(ABC, HTMLParser):
             self.should_read = self.start_new_tag(tag, dict(attrs))
             return
         attrs_class_name = self.__get_attrs_value_by_name(attrs, "class")
-        if (attrs_class_name is None or attrs_class_name not in readable_classes):
+        if(attrs_class_name is None or attrs_class_name not in readable_classes):
             self.tag_status.append(False)
             return
         self.tag_status.append(True)
