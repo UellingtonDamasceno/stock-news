@@ -1,4 +1,4 @@
-from crawlers.white_list_html_parser import WhiteListHtmlParser
+from datasources.crawlers.white_list_html_parser import WhiteListHtmlParser
 
 
 class InfoMoneyParser(WhiteListHtmlParser):

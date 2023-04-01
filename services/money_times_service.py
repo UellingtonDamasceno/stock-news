@@ -1,6 +1,6 @@
 from services.crawler_service import CrawlerService
-from crawlers.money_times.money_times import MoneyTimesParser
-from crawlers.money_times.money_times_news_reader import MoneyTimesNewsReader
+from datasources.crawlers.money_times.money_times import MoneyTimesParser
+from datasources.crawlers.money_times.money_times_news_reader import MoneyTimesNewsReader
 
 
 class MoneyTimesService(CrawlerService):

@@ -1,4 +1,4 @@
-from crawlers.white_list_html_parser import WhiteListHtmlParser
+from datasources.crawlers.white_list_html_parser import WhiteListHtmlParser
 
 
 class YourMoneyNewsReader(WhiteListHtmlParser):
@@ -17,7 +17,7 @@ class YourMoneyNewsReader(WhiteListHtmlParser):
             if class_name == "newSingle_author_info_content_title" or class_name == "singlev2_colunista_content_title":
                 self.in_author_tag = True
                 return True
-            if class_name == "newSingle_content_right" or class_name == "singlev2_content_right":
+            if class_name == "newSingle_content_right" or class_name == "newSingle_content":
                 self.in_content_tag = True
                 return True
             if class_name == "single__footer-author":

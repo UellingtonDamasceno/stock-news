@@ -1,6 +1,6 @@
 
-from crawlers.info_money.info_money import InfoMoneyParser
-from crawlers.info_money.info_money_news_reader import InfoMoneyNewsReader
+from datasources.crawlers.info_money.info_money import InfoMoneyParser
+from datasources.crawlers.info_money.info_money_news_reader import InfoMoneyNewsReader
 from services.crawler_service import CrawlerService
 
 
