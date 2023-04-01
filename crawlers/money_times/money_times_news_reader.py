@@ -6,8 +6,9 @@ class MoneyTimesNewsReader(WhiteListHtmlParser):
         super().__init__()
         self.content_news = dict()
         self.paragraphs = ""
-        self.in_content_tag = True
+        self.in_content_tag = False
         self.in_author_tag = False
+        self.is_first_image = True
 
     def start_new_tag(self, tag, attrs):
         if tag == "div":
@@ -17,9 +18,10 @@ class MoneyTimesNewsReader(WhiteListHtmlParser):
                 return True
             if class_name == "single-meta__author":
                 self.in_author_tag = True
-                return True
-        if tag == "img":
+                return False
+        if tag == "img" and self.is_first_image and self.in_content_tag:
             self.content_news["image"] = attrs.get("src")
+            self.is_first_image = False
             return False
         if tag == "p" and self.in_content_tag:
             self.current_data = ""
@@ -35,6 +37,8 @@ class MoneyTimesNewsReader(WhiteListHtmlParser):
         if tag == "article":
             self.content_news["content"] = self.paragraphs
             self.paragraphs = ""
+            self.in_content_tag = False
+            self.is_first_image = True
 
     def readable_tags(self) -> dict:
         readable_tags = dict()
@@ -42,7 +46,6 @@ class MoneyTimesNewsReader(WhiteListHtmlParser):
         div_tag = readable_tags.setdefault("div", set())
         a_tag = readable_tags.setdefault("a", set())
 
-        img_tag.add("size-full wp-image-418437")
         div_tag.add("single__text")
         div_tag.add("single-meta__author")
         return readable_tags

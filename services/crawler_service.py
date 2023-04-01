@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import urllib.request
+import uuid
 
 
 class CrawlerService(ABC):
@@ -9,7 +10,10 @@ class CrawlerService(ABC):
     @abstractmethod
     def process(self):
         pass
-
+    
+    def generate_uuid(self) -> str:
+        return str(uuid.uuid4())   
+    
     def get_category_from_url(self, url):
         return url[url.rfind("/") + 1:].replace("\n", "")
 

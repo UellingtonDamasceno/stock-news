@@ -14,13 +14,14 @@ class MoneyTimesService(CrawlerService):
     def process(self):
         url = "https://www.moneytimes.com.br/page/"
         print("Processing MoneyTimes")
-        for i in range(1, 100):
+        for i in range(1, 2):
             print("Processing seed: ", url, str(i))
             self.parser.feed(self.parser_page(url + str(i)))
             for news in self.parser.news:
                 print("Processing news: ", news["link"])
                 news_page = self.parser_page(news["link"])
                 self.news_reader.feed(news_page)
+                news["uuid"] = self.generate_uuid()
                 news["author"] = self.news_reader.content_news["author"]
                 news["image"] = self.news_reader.content_news.get(
                     "image", "")

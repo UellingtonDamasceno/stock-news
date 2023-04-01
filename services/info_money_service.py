@@ -24,6 +24,7 @@ class InfoMoneyService(CrawlerService):
                 print("Parsing news: ", news["link"])
                 news_page = self.parser_page(news["link"])
                 self.news_reader.feed(news_page)
+                news["uuid"] = self.generate_uuid()
                 news["published_at"] = self.news_reader.content_news["published_at"]
                 news["author"] = self.news_reader.content_news["author"]
                 news["image"] = self.news_reader.content_news.get("image", "")
