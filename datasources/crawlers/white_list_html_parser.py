@@ -1,16 +1,19 @@
 from html.parser import HTMLParser
 from abc import ABC, abstractmethod
+from datetime import datetime
+from dateutil import tz
 import re
 
 
 class WhiteListHtmlParser(ABC, HTMLParser):
-    def __init__(self, allowed_url=[]):
+    def __init__(self, allowed_url=[], date_pattern="%Y-%m-%dT%H:%M:%S"):
         super().__init__()
         self.__readable_tags = self.readable_tags()
         self.allowed_url = allowed_url
         self.current_data = ""
         self.should_read = False
         self.tag_status = []
+        self.date_pattern = date_pattern
 
     def __get_attrs_value_by_name(self, lst, attrs_name):
         for elem in lst:
@@ -66,3 +69,8 @@ class WhiteListHtmlParser(ABC, HTMLParser):
 
     def get_formatted_data(self):
         return re.sub(r"\s{4,}", " ", self.current_data.strip())
+
+    def format_date(self, date_str):
+        dt = datetime.strptime(date_str, self.date_pattern)
+        dt_local = dt.replace(tzinfo=tz.tzlocal())
+        return dt_local.strftime("%Y-%m-%dT%H:%M:%S")

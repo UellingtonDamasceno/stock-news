@@ -4,7 +4,7 @@ import re
 
 class InfoMoneyNewsReader(WhiteListHtmlParser):
     def __init__(self):
-        super().__init__()
+        super().__init__(date_pattern="%Y-%m-%dT%H:%M:%S%z")
         self.content_news = dict()
         self.paragraphs = ""
         self.in_author_tag = False
@@ -16,7 +16,8 @@ class InfoMoneyNewsReader(WhiteListHtmlParser):
             self.in_author_tag = True
             return False
         if tag == "time":
-            self.content_news["published_at"] = attrs.get("datetime")
+            date = attrs.get("datetime")
+            self.content_news["published_at"] = self.format_date(date)
             return False
         if tag == "img":
             self.content_news["image"] = attrs.get("src")

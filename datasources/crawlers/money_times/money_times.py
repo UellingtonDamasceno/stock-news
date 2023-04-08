@@ -3,7 +3,7 @@ from datasources.crawlers.white_list_html_parser import WhiteListHtmlParser
 
 class MoneyTimesParser(WhiteListHtmlParser):
     def __init__(self, allowed_urls: list):
-        super().__init__(allowed_url=allowed_urls)
+        super().__init__(allowed_urls, "%d/%m/%Y - %H:%M")
         self.current_news = dict()
         self.news = []
         self.in_div_news_list = False
@@ -47,7 +47,8 @@ class MoneyTimesParser(WhiteListHtmlParser):
         elif tag == "h2" and self.in_div_news_item:
             self.current_news["title"] = self.current_data.strip()
         elif tag == "span" and self.in_div_meta:
-            self.current_news["published_at"] = self.current_data.strip()
+            date = self.current_data.strip()
+            self.current_news["published_at"] = self.format_date(date)
             self.in_div_meta = False
 
     def readable_tags(self) -> dict:

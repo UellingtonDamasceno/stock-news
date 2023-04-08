@@ -1,13 +1,11 @@
 import paho.mqtt.client as paho
+from clients.publisher import Publisher
 from paho import mqtt
 
 
-class Publisher:
-    def __init__(self, host='localhost', username='', password='', port=1883):
-        self.host = host
-        self.username = username
-        self.password = password
-        self.port = port
+class MqttPublisher(Publisher):
+    def __init__(self, host="localhost", username="", password="", port=1883):
+        super().__init__(host, username, password, port)
         self.client = paho.Client(
             client_id="stock-news-pub",
             userdata=None,
@@ -19,8 +17,8 @@ class Publisher:
         self.client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
         self.client.connect(self.host, self.port)
 
-    def publish(self, topic, message):
-        self.client.publish(topic, message, qos=1)
+    def publish(self, topic, data):
+        self.client.publish(topic, data, qos=1)
 
     def disconnect(self):
         self.client.disconnect()

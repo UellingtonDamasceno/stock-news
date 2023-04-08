@@ -12,11 +12,10 @@ class MoneyTimesService(CrawlerService):
         self.all_news = []
 
     def process(self):
-        url = "https://www.moneytimes.com.br/page/"
         print("Processing MoneyTimes")
-        for i in range(1, 2):
-            print("Processing seed: ", url, str(i))
-            self.parser.feed(self.parser_page(url + str(i)))
+        for seed in self.seeds:
+            print("Parsing URL: ", seed)
+            self.parser.feed(self.parser_page(seed))
             for news in self.parser.news:
                 print("Processing news: ", news["link"])
                 news_page = self.parser_page(news["link"])
@@ -29,4 +28,4 @@ class MoneyTimesService(CrawlerService):
                     "content")
                 self.all_news.extend(self.parser.news)
                 self.parser.news = []
-        return self.all_news
+            return self.all_news

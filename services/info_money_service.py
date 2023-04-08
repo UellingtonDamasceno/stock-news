@@ -16,7 +16,6 @@ class InfoMoneyService(CrawlerService):
         print("Processing InfoMoney")
         for url in self.seeds:
             print("Parsing URL: ", url)
-            self.parser.category = self.get_category_from_url(url)
             page = self.parser_page(url)
             self.parser.feed(page)
             print("News found: ", len(self.parser.news))

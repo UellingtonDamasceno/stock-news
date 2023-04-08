@@ -4,7 +4,7 @@ import re
 
 class YourMoneyParser(WhiteListHtmlParser):
     def __init__(self, allowed_urls: list):
-        super().__init__(allowed_url=allowed_urls)
+        super().__init__(allowed_urls, "%Y-%m-%d %H:%M")
         self.news = list()
         self.current_news = dict()
         self.is_first_news = True
@@ -29,7 +29,8 @@ class YourMoneyParser(WhiteListHtmlParser):
                 self.in_div_content = True
                 return True
             if tag_class == "stream-item-container t-ultimas sd-ultimas feed":
-                self.current_news["published_at"] = attrs.get("data-time")
+                date = attrs.get("data-time")
+                self.current_news["published_at"] = self.format_date(date)
                 if self.is_first_news:
                     self.is_first_news = False
                 else:

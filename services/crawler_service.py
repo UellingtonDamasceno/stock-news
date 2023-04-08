@@ -6,14 +6,15 @@ import uuid
 class CrawlerService(ABC):
     def __init__(self, seed_file: str):
         self.seed_file = seed_file
+        self.visited_links = []
 
     @abstractmethod
     def process(self):
         pass
-    
+
     def generate_uuid(self) -> str:
-        return str(uuid.uuid4())   
-    
+        return str(uuid.uuid4())
+
     def get_category_from_url(self, url):
         return url[url.rfind("/") + 1:].replace("\n", "")
 
@@ -28,4 +29,5 @@ class CrawlerService(ABC):
     def parser_page(self, url):
         req = urllib.request.Request(
             url, headers={'User-Agent': 'Mozilla/5.0'})
+        self.visited_links.append(url)
         return urllib.request.urlopen(req).read().decode("utf-8")

@@ -3,9 +3,8 @@ from datasources.crawlers.white_list_html_parser import WhiteListHtmlParser
 
 class InfoMoneyParser(WhiteListHtmlParser):
 
-    def __init__(self, category="S/C", allowed_urls=[]):
+    def __init__(self, allowed_urls=[]):
         super().__init__(allowed_url=allowed_urls)
-        self.category = category
         self.current_news = dict()
         self.news = []
         self.in_article = False
@@ -22,7 +21,6 @@ class InfoMoneyParser(WhiteListHtmlParser):
         elif(tag == "h3"):
             self.current_news["title"] = self.get_formatted_data()
 
-        self.current_news["category"] = self.category
         # print("Tag: ", tag)
         # print("Attrs: ")
         # for key, value in attrs.items():
