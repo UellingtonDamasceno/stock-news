@@ -56,7 +56,7 @@ class YourMoneyParser(WhiteListHtmlParser):
 
     def end_tag(self, tag) -> None:
         if tag == "a" and self.in_div_content_hat:
-            self.current_news["tag"] = self.get_formatted_data()
+            self.current_news["tag"] = self.get_formatted_data().upper()
             self.in_div_content_hat = False
             return
         if tag == "h2" and self.in_div_content:

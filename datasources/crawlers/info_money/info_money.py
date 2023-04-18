@@ -17,7 +17,7 @@ class InfoMoneyParser(WhiteListHtmlParser):
             self.in_article = True
         elif(tag == "a"):
             self.current_news["link"] = attrs.get("href")
-            self.current_news["tag"] = self.get_formatted_data()
+            self.current_news["tag"] = self.get_formatted_data().upper()
         elif(tag == "h3"):
             self.current_news["title"] = self.get_formatted_data()
 

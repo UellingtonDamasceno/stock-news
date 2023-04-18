@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 import urllib.request
 import uuid
+from datetime import datetime
 
 
 class CrawlerService(ABC):
     def __init__(self, seed_file: str):
         self.seed_file = seed_file
-        self.visited_links = []
+        self.visited_links = set()
 
     @abstractmethod
     def process(self):
@@ -29,5 +30,8 @@ class CrawlerService(ABC):
     def parser_page(self, url):
         req = urllib.request.Request(
             url, headers={'User-Agent': 'Mozilla/5.0'})
-        self.visited_links.append(url)
+        self.visited_links.add(url)
         return urllib.request.urlopen(req).read().decode("utf-8")
+
+    def get_collected_date(self):
+        return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")

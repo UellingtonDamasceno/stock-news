@@ -41,7 +41,7 @@ class MoneyTimesParser(WhiteListHtmlParser):
             self.current_news = dict()
             self.in_div_news_item = False
         elif(tag == "a" and self.in_div_news_category):
-            self.current_news["tag"] = self.current_data.strip()
+            self.current_news["tag"] = self.current_data.strip().upper()
         elif tag == "div" and self.in_div_news_list:
             self.in_div_news_list = False
         elif tag == "h2" and self.in_div_news_item:

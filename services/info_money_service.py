@@ -16,11 +16,17 @@ class InfoMoneyService(CrawlerService):
         print("Processing InfoMoney")
         for url in self.seeds:
             print("Parsing URL: ", url)
+            if url in self.visited_links:
+                self.parser.current_news = dict()
+                continue
             page = self.parser_page(url)
             self.parser.feed(page)
             print("News found: ", len(self.parser.news))
             for news in self.parser.news:
                 print("Parsing news: ", news["link"])
+                if news["link"] in self.visited_links:
+                    self.news_reader.content_news = dict()
+                    continue
                 news_page = self.parser_page(news["link"])
                 self.news_reader.feed(news_page)
                 news["uuid"] = self.generate_uuid()
@@ -29,6 +35,7 @@ class InfoMoneyService(CrawlerService):
                 news["image"] = self.news_reader.content_news.get("image", "")
                 news["content"] = self.news_reader.content_news.get(
                     "content", [])
+                news["collected_at"] = self.get_collected_date()
                 self.news_reader.content_news = dict()
             self.all_news.extend(self.parser.news)
             self.parser.news = []

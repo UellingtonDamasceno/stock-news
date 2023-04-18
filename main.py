@@ -13,7 +13,8 @@ import os
 def send_news(news: list, publisher: Publisher):
     for new in news:
         new_json = json.dumps(new, ensure_ascii=False)
-        print("Publishing: ", new["title"])
+        print("Sending news: ")
+        print(new["title"])
         publisher.send(data=new_json)
 
 
